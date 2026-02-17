@@ -722,7 +722,9 @@
                         <div class="actions">
                             <button class="btn btn-copy" onclick="copyStory(this)">📋 Copy Story</button>
                             <a href="${story.link}" target="_blank" class="btn btn-link">🔗 Full Article</a>
-                            ${hasAudio ? `<a href="${story.audioUrl}" download class="btn btn-audio">⬇️ Download Audio</a>` : ''}
+                            ${hasAudio ? `<a href="${story.downloadUrl || story.audioUrl}" download class="btn btn-audio">⬇️ Download Audio</a>` : ''}
+                            ${story.trt ? `<span style="color:#666;font-size:0.85em;padding:8px;">TRT ${story.trt}</span>` : ''}
+                            ${story.outCue ? `<span style="color:#666;font-size:0.85em;padding:8px;">Out: "${story.outCue}"</span>` : ''}
                         </div>
                         <textarea class="story-text">${formatStoryForCopy(story)}</textarea>
                     </div>
