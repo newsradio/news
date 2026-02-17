@@ -118,6 +118,23 @@
         .stat-item {
             text-align: center;
             min-width: 100px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .stat-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .stat-item.active {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .stat-item.active .stat-number {
+            color: white;
         }
         
         .stat-number {
@@ -131,12 +148,35 @@
             color: #666;
         }
         
+        .stat-item.active .stat-label {
+            color: white;
+        }
+        
         .filters {
             background: white;
             padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .filter-section {
+            margin-bottom: 15px;
+        }
+        
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .filter-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.9em;
+        }
+        
+        .filter-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -150,6 +190,7 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
+            font-size: 0.9em;
         }
         
         .filter-btn:hover {
@@ -293,12 +334,48 @@
             margin-bottom: 12px;
         }
         
+        .audio-player {
+            background: #fffbea;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin: 12px 0;
+        }
+        
+        .audio-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .audio-icon {
+            font-size: 1.3em;
+        }
+        
+        .audio-title {
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .audio-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .audio-controls audio {
+            flex: 1;
+            height: 32px;
+        }
+        
         .actions {
             display: flex;
             gap: 10px;
             margin-top: 12px;
             padding-top: 12px;
             border-top: 1px solid #eee;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -329,6 +406,15 @@
         
         .btn-link:hover {
             background: #0056b3;
+        }
+        
+        .btn-audio {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-audio:hover {
+            background: #e0a800;
         }
         
         .story-text {
@@ -394,31 +480,36 @@
         </div>
         
         <div class="stats" id="stats" style="display: none;">
-            <div class="stat-item">
+            <div class="stat-item active" onclick="filterByRegion('all')" data-region="all">
                 <div class="stat-number" id="totalCount">0</div>
-                <div class="stat-label">Total Stories</div>
+                <div class="stat-label">All Stories</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" onclick="filterByRegion('Local')" data-region="Local">
                 <div class="stat-number" id="localCount">0</div>
                 <div class="stat-label">Local</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" onclick="filterByRegion('State')" data-region="State">
                 <div class="stat-number" id="stateCount">0</div>
                 <div class="stat-label">State</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" onclick="filterByRegion('National')" data-region="National">
                 <div class="stat-number" id="nationalCount">0</div>
                 <div class="stat-label">National</div>
             </div>
         </div>
         
         <div class="filters" id="filters" style="display: none;">
-            <button class="filter-btn active" onclick="filterStories('all')">All Stories</button>
-            <button class="filter-btn" onclick="filterStories('Breaking')">Breaking</button>
-            <button class="filter-btn" onclick="filterStories('Local')">Local</button>
-            <button class="filter-btn" onclick="filterStories('Weather')">Weather</button>
-            <button class="filter-btn" onclick="filterStories('Crime')">Crime</button>
-            <button class="filter-btn" onclick="filterStories('Traffic')">Traffic</button>
+            <div class="filter-section">
+                <span class="filter-label">Filter by Category:</span>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterByCategory('all')">All Categories</button>
+                    <button class="filter-btn" onclick="filterByCategory('Breaking')">Breaking</button>
+                    <button class="filter-btn" onclick="filterByCategory('Weather')">Weather</button>
+                    <button class="filter-btn" onclick="filterByCategory('Crime')">Crime</button>
+                    <button class="filter-btn" onclick="filterByCategory('Traffic')">Traffic</button>
+                    <button class="filter-btn" onclick="filterByCategory('Politics')">Politics</button>
+                </div>
+            </div>
         </div>
         
         <div id="content">
@@ -435,19 +526,16 @@
         // CONFIGURATION
         // ============================================
         
-        // Replace this with your Cloudflare Worker URL after deployment
+        // Replace this with your Cloudflare Worker URL
         const WORKER_URL = 'https://news.newsradio1620pensacola.workers.dev/';
-        // Example: 'https://news-aggregator.your-username.workers.dev'
-        
-        // For testing locally, you can use a test endpoint
-        // const WORKER_URL = 'https://your-worker.workers.dev';
         
         // ============================================
         // GLOBAL VARIABLES
         // ============================================
         
         let allStories = [];
-        let currentFilter = 'all';
+        let currentRegion = 'all';
+        let currentCategory = 'all';
         
         // ============================================
         // FETCH NEWS FROM WORKER
@@ -485,7 +573,7 @@
                 
                 if (data.success) {
                     allStories = data.stories;
-                    displayStories(allStories);
+                    displayStories(filterStories());
                     updateStats(allStories);
                     
                     // Update status
@@ -495,7 +583,7 @@
                     
                     // Show stats and filters
                     document.getElementById('stats').style.display = 'flex';
-                    document.getElementById('filters').style.display = 'flex';
+                    document.getElementById('filters').style.display = 'block';
                     
                 } else {
                     throw new Error(data.error || 'Unknown error');
@@ -528,6 +616,59 @@
         }
         
         // ============================================
+        // FILTER STORIES
+        // ============================================
+        
+        function filterStories() {
+            let filtered = allStories;
+            
+            // Filter by region
+            if (currentRegion !== 'all') {
+                filtered = filtered.filter(story => 
+                    story.region === currentRegion
+                );
+            }
+            
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(story => 
+                    story.category && story.category.toLowerCase() === currentCategory.toLowerCase()
+                );
+            }
+            
+            return filtered;
+        }
+        
+        function filterByRegion(region) {
+            currentRegion = region;
+            
+            // Update active stat item
+            document.querySelectorAll('.stat-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.region === region) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Display filtered stories
+            displayStories(filterStories());
+        }
+        
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // Update active filter button
+            const buttons = document.querySelectorAll('.filter-section .filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Display filtered stories
+            displayStories(filterStories());
+        }
+        
+        // ============================================
         // DISPLAY STORIES
         // ============================================
         
@@ -539,7 +680,7 @@
                     <div class="no-stories">
                         <div class="no-stories-icon">📭</div>
                         <h2>No stories found</h2>
-                        <p>No news stories match the current filter</p>
+                        <p>No news stories match the current filters</p>
                     </div>
                 `;
                 return;
@@ -547,10 +688,28 @@
             
             const storiesHTML = stories.map(story => {
                 const category = (story.category || 'General').toLowerCase();
-                const pubDate = story.pubDate ? new Date(story.pubDate).toLocaleString() : 'Unknown time';
+                const hasAudio = story.audioUrl; // We'll need to add this to worker
+                
+                let audioHTML = '';
+                if (hasAudio) {
+                    audioHTML = `
+                        <div class="audio-player">
+                            <div class="audio-header">
+                                <span class="audio-icon">🔊</span>
+                                <span class="audio-title">AUDIO AVAILABLE</span>
+                            </div>
+                            <div class="audio-controls">
+                                <audio controls>
+                                    <source src="${story.audioUrl}" type="audio/mpeg">
+                                    Your browser does not support audio playback.
+                                </audio>
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 return `
-                    <div class="story ${category}" data-category="${story.category}">
+                    <div class="story ${category}" data-category="${story.category}" data-region="${story.region}">
                         <div class="story-header">
                             <span class="category-badge ${category}">${story.category || 'General'}</span>
                             <span class="region-badge">${story.region || 'General'}</span>
@@ -559,9 +718,11 @@
                         </div>
                         <div class="headline">${escapeHtml(story.title)}</div>
                         <div class="description">${escapeHtml(story.description)}</div>
+                        ${audioHTML}
                         <div class="actions">
                             <button class="btn btn-copy" onclick="copyStory(this)">📋 Copy Story</button>
                             <a href="${story.link}" target="_blank" class="btn btn-link">🔗 Full Article</a>
+                            ${hasAudio ? `<a href="${story.audioUrl}" download class="btn btn-audio">⬇️ Download Audio</a>` : ''}
                         </div>
                         <textarea class="story-text">${formatStoryForCopy(story)}</textarea>
                     </div>
@@ -584,30 +745,6 @@
             document.getElementById('localCount').textContent = localCount;
             document.getElementById('stateCount').textContent = stateCount;
             document.getElementById('nationalCount').textContent = nationalCount;
-        }
-        
-        // ============================================
-        // FILTER STORIES
-        // ============================================
-        
-        function filterStories(category) {
-            currentFilter = category;
-            
-            // Update active filter button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Filter stories
-            if (category === 'all') {
-                displayStories(allStories);
-            } else {
-                const filtered = allStories.filter(story => 
-                    story.category && story.category.toLowerCase() === category.toLowerCase()
-                );
-                displayStories(filtered);
-            }
         }
         
         // ============================================
@@ -643,6 +780,9 @@
         function formatStoryForCopy(story) {
             let text = `${story.title}\n\n`;
             text += `${story.description}\n\n`;
+            if (story.audioUrl) {
+                text += `Audio: ${story.audioUrl}\n`;
+            }
             text += `Source: ${story.source}\n`;
             text += `Link: ${story.link}`;
             return text;
@@ -670,13 +810,6 @@
             div.textContent = text;
             return div.innerHTML;
         }
-        
-        // ============================================
-        // AUTO-REFRESH (Optional)
-        // ============================================
-        
-        // Uncomment to enable auto-refresh every 5 minutes
-        // setInterval(fetchNews, 5 * 60 * 1000);
         
     </script>
 </body>
