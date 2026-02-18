@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NewsRadio 92.3 - Newsroom Feed v4</title>
+    <title>NewsRadio 1620 - Newsroom Feed</title>
     <style>
         * {
             margin: 0;
@@ -15,311 +15,371 @@
             background: #f5f5f5;
             color: #333;
         }
+        
+        /* RED STATION COLORS! */
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #c62828 0%, #b71c1c 50%, #8b0000 100%);
             color: white;
-            padding: 20px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px 30px;
+            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+            border-bottom: 3px solid #ff5252;
         }
         .header h1 {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
             margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
         }
         .header .tagline {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 500;
         }
+        
         .controls {
             background: white;
             padding: 20px 30px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 2px solid #ffebee;
             display: flex;
             gap: 15px;
             align-items: center;
             flex-wrap: wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .search-box {
             flex: 1;
             min-width: 250px;
-            max-width: 400px;
+            max-width: 450px;
         }
         .search-box input {
             width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
+            padding: 12px 18px;
+            border: 2px solid #ffcdd2;
             border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.2s;
+            font-size: 15px;
+            transition: all 0.3s;
         }
         .search-box input:focus {
             outline: none;
-            border-color: #2a5298;
+            border-color: #c62828;
+            box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
         }
+        
         .btn {
-            padding: 10px 20px;
+            padding: 11px 22px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .btn-primary {
-            background: #2a5298;
+            background: linear-gradient(135deg, #c62828, #d32f2f);
             color: white;
+            box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
         }
         .btn-primary:hover {
-            background: #1e3c72;
+            background: linear-gradient(135deg, #b71c1c, #c62828);
+            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.4);
+            transform: translateY(-1px);
         }
         .btn-filter {
-            background: #f0f0f0;
-            color: #333;
+            background: #fff;
+            color: #666;
+            border: 2px solid #e0e0e0;
         }
         .btn-filter:hover {
-            background: #e0e0e0;
+            background: #ffebee;
+            border-color: #ffcdd2;
+            color: #c62828;
         }
         .btn-filter.active {
-            background: #2a5298;
+            background: linear-gradient(135deg, #c62828, #d32f2f);
             color: white;
+            border-color: #c62828;
+            box-shadow: 0 2px 6px rgba(198, 40, 40, 0.3);
         }
+        
         .stats {
-            background: white;
-            padding: 15px 30px;
-            border-bottom: 1px solid #e0e0e0;
+            background: linear-gradient(to right, #ffebee, #ffffff);
+            padding: 18px 30px;
+            border-bottom: 1px solid #ffcdd2;
             display: flex;
-            gap: 30px;
+            gap: 35px;
             font-size: 14px;
+            box-shadow: inset 0 2px 4px rgba(198, 40, 40, 0.05);
         }
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .stat-label {
             color: #666;
+            font-weight: 600;
         }
         .stat-value {
-            font-weight: 700;
-            color: #2a5298;
-            font-size: 18px;
+            font-weight: 900;
+            color: #c62828;
+            font-size: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
+        
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 25px;
         }
+        
         .story-card {
             background: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 24px;
+            margin-bottom: 22px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
         }
         .story-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 6px 20px rgba(198, 40, 40, 0.15);
+            border-left-color: #c62828;
         }
+        
         .story-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
         .story-meta {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
+        
         .badge {
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .badge-local {
-            background: #e3f2fd;
-            color: #1976d2;
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 1px solid #ffcdd2;
         }
         .badge-state {
-            background: #f3e5f5;
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
             color: #7b1fa2;
+            border: 1px solid #e1bee7;
         }
         .badge-national {
-            background: #fce4ec;
-            color: #c2185b;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1976d2;
+            border: 1px solid #bbdefb;
         }
         .badge-category {
             background: #f5f5f5;
             color: #666;
+            border: 1px solid #e0e0e0;
         }
+        
         .story-time {
             color: #999;
             font-size: 13px;
+            font-weight: 600;
         }
         .story-source {
-            font-weight: 600;
-            color: #555;
+            font-weight: 700;
+            color: #c62828;
             font-size: 13px;
         }
+        
         .story-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #222;
-            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 12px;
             line-height: 1.4;
         }
         .story-title a {
             color: inherit;
             text-decoration: none;
+            transition: color 0.2s;
         }
         .story-title a:hover {
-            color: #2a5298;
+            color: #c62828;
         }
+        
         .story-description {
             color: #555;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 15px;
         }
+        
         .broadcast-copy {
-            background: #fffbec;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #fff9c4, #fff59d);
+            border-left: 5px solid #fdd835;
+            padding: 18px;
+            margin-top: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(253, 216, 53, 0.2);
         }
         .broadcast-copy-label {
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            color: #f57c00;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            color: #f57f17;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
         .broadcast-copy-text {
             color: #333;
-            line-height: 1.7;
-            font-size: 15px;
+            line-height: 1.8;
+            font-size: 16px;
+            font-weight: 500;
         }
+        
         .audio-player {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
+            background: linear-gradient(135deg, #ffebee, #fff);
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 16px;
+            border: 2px solid #ffcdd2;
         }
         .audio-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 13px;
         }
         .audio-label {
-            font-weight: 600;
-            color: #2a5298;
+            font-weight: 800;
+            color: #c62828;
+            font-size: 14px;
         }
         .audio-meta {
             color: #666;
             font-size: 12px;
+            font-weight: 600;
         }
+        
         .outcue {
-            background: #e8f5e9;
-            border-left: 3px solid #4caf50;
-            padding: 10px 12px;
-            margin-top: 10px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-left: 4px solid #4caf50;
+            padding: 12px 15px;
+            margin-top: 12px;
+            border-radius: 6px;
             font-size: 13px;
         }
         .outcue-label {
-            font-weight: 700;
+            font-weight: 800;
             color: #2e7d32;
             font-size: 11px;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
         .outcue-text {
             color: #1b5e20;
+            font-weight: 600;
+            font-style: italic;
         }
+        
         audio {
             width: 100%;
-            height: 32px;
+            height: 36px;
         }
+        
         .loading {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             color: #666;
         }
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #2a5298;
+            border: 4px solid #ffcdd2;
+            border-top: 4px solid #c62828;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
         .error {
             background: #ffebee;
             color: #c62828;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px;
+            border-left: 5px solid #c62828;
+            font-weight: 600;
         }
+        
         @media (max-width: 768px) {
             .header {
-                padding: 15px 20px;
+                padding: 20px;
             }
             .header h1 {
-                font-size: 22px;
+                font-size: 26px;
             }
             .controls {
                 padding: 15px 20px;
             }
             .stats {
-                padding: 12px 20px;
+                padding: 15px 20px;
                 flex-wrap: wrap;
+                gap: 20px;
             }
             .container {
                 padding: 15px;
             }
             .story-card {
-                padding: 15px;
+                padding: 18px;
             }
             .story-title {
-                font-size: 18px;
+                font-size: 19px;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📻 NewsRadio 92.3 - Newsroom Feed</h1>
-        <div class="tagline">In House News Updates</div>
+        <h1>📻 NEWSRADIO 1620 - NEWSROOM FEED</h1>
+        <div class="tagline">Professional News Aggregation • AI Broadcast Rewrites • Live Audio</div>
     </div>
 
     <div class="controls">
         <div class="search-box">
-            <input type="text" id="searchBox" placeholder="🔍 Search stories..." oninput="searchStories(this.value)">
+            <input type="text" id="searchBox" placeholder="🔍 Search stories, sources, keywords..." oninput="searchStories(this.value)">
         </div>
         
         <button class="btn btn-filter active" onclick="filterAll()">All</button>
         <button class="btn btn-filter" onclick="filterByRegion('Local')">Local</button>
         <button class="btn btn-filter" onclick="filterByRegion('State')">State</button>
         <button class="btn btn-filter" onclick="filterByRegion('National')">National</button>
-        <button class="btn btn-filter" onclick="filterByAudio()">🔊 Audio Only</button>
+        <button class="btn btn-filter" onclick="filterByAudio()">🔊 Audio</button>
         <button class="btn btn-primary" onclick="loadStories()">🔄 Refresh</button>
     </div>
 
     <div class="stats">
         <div class="stat-item">
-            <span class="stat-label">Total:</span>
+            <span class="stat-label">Total Stories:</span>
             <span class="stat-value" id="all-count">0</span>
         </div>
         <div class="stat-item">
@@ -347,7 +407,7 @@
     <div class="container" id="stories-container">
         <div class="loading">
             <div class="spinner"></div>
-            <p>Loading stories...</p>
+            <p style="font-size: 16px; font-weight: 600; color: #c62828;">Loading stories...</p>
         </div>
     </div>
 
@@ -357,7 +417,7 @@
 
         async function loadStories() {
             const container = document.getElementById('stories-container');
-            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading stories...</p></div>';
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p style="font-size: 16px; font-weight: 600; color: #c62828;">Loading stories...</p></div>';
 
             try {
                 const response = await fetch(API_URL);
@@ -371,7 +431,6 @@
                 displayStories(allStories);
                 updateStats();
                 
-                // Update last updated time
                 const updateTime = new Date(data.updated).toLocaleTimeString('en-US', {
                     hour: 'numeric',
                     minute: '2-digit'
@@ -387,7 +446,7 @@
             const container = document.getElementById('stories-container');
             
             if (stories.length === 0) {
-                container.innerHTML = '<div class="loading"><p>No stories found</p></div>';
+                container.innerHTML = '<div class="loading"><p style="font-size: 16px; font-weight: 600; color: #c62828;">No stories found</p></div>';
                 return;
             }
 
@@ -401,10 +460,10 @@
             const audioSection = story.audioUrl ? `
                 <div class="audio-player">
                     <div class="audio-info">
-                        <span class="audio-label">🎙️ Audio Available</span>
+                        <span class="audio-label">🎙️ AUDIO AVAILABLE</span>
                         ${story.trt ? `<span class="audio-meta">TRT: ${story.trt}</span>` : ''}
                     </div>
-                    <audio controls>
+                    <audio controls preload="none">
                         <source src="${story.audioUrl}" type="audio/mpeg">
                         Your browser does not support audio playback.
                     </audio>
@@ -512,7 +571,6 @@
 
             displayStories(filtered);
             
-            // Clear filter button highlights when searching
             document.querySelectorAll('.btn-filter').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -525,10 +583,7 @@
             button.classList.add('active');
         }
 
-        // Load stories on page load
         loadStories();
-
-        // Auto-refresh every 5 minutes
         setInterval(loadStories, 5 * 60 * 1000);
     </script>
 </body>
