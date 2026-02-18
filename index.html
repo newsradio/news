@@ -3,816 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newsroom Feed - Live Aggregator</title>
+    <title>NewsRadio 1620 - Newsroom Feed</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px;
-            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
         }
-        
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
         .header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
         .header h1 {
-            font-size: 2.2em;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
-        
-        .header .subtitle {
-            font-size: 1em;
+        .header .tagline {
+            font-size: 14px;
             opacity: 0.9;
         }
-        
         .controls {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
             flex-wrap: wrap;
         }
-        
-        .btn-refresh {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
+        .btn {
+            padding: 10px 20px;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            font-weight: bold;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-refresh:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-        }
-        
-        .btn-refresh:active {
-            transform: translateY(0);
-        }
-        
-        .btn-refresh:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        .status {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .status-text {
-            font-size: 0.95em;
-            color: #666;
-        }
-        
-        .last-update {
-            font-weight: bold;
-            color: #2a5298;
-        }
-        
-        .stats {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .stat-item {
-            text-align: center;
-            min-width: 100px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .stat-item:hover {
-            background: #f0f0f0;
-        }
-        
-        .stat-item.active {
-            background: #2a5298;
-            color: white;
-        }
-        
-        .stat-item.active .stat-number {
-            color: white;
-        }
-        
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2a5298;
-        }
-        
-        .stat-label {
-            font-size: 0.9em;
-            color: #666;
-        }
-        
-        .stat-item.active .stat-label {
-            color: white;
-        }
-        
-        .filters {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .filter-section {
-            margin-bottom: 15px;
-        }
-        
-        .filter-section:last-child {
-            margin-bottom: 0;
-        }
-        
-        .filter-label {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-            display: block;
-            font-size: 0.9em;
-        }
-        
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #ddd;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        
-        .filter-btn:hover {
-            background: #f0f0f0;
-        }
-        
-        .filter-btn.active {
-            background: #2a5298;
-            color: white;
-            border-color: #2a5298;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2a5298;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #dc3545;
-        }
-        
-        .stories-container {
-            display: grid;
-            gap: 15px;
-        }
-        
-        .story {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 5px solid #2a5298;
             transition: all 0.2s;
         }
-        
-        .story:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        .btn-primary {
+            background: #2a5298;
+            color: white;
         }
-        
-        .story.breaking {
-            border-left-color: #dc3545;
-            background: linear-gradient(to right, #fff5f5 0%, white 100%);
+        .btn-primary:hover {
+            background: #1e3c72;
         }
-        
-        .story.weather {
-            border-left-color: #17a2b8;
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
         }
-        
-        .story.crime {
-            border-left-color: #6f42c1;
+        .btn-secondary:hover {
+            background: #d0d0d0;
         }
-        
-        .story.traffic {
-            border-left-color: #ffc107;
+        .btn-secondary.active {
+            background: #2a5298;
+            color: white;
         }
-        
-        .story-header {
+        .stats {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .category-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .category-badge.breaking { background: #dc3545; color: white; }
-        .category-badge.local { background: #28a745; color: white; }
-        .category-badge.weather { background: #17a2b8; color: white; }
-        .category-badge.crime { background: #6f42c1; color: white; }
-        .category-badge.traffic { background: #ffc107; color: #333; }
-        .category-badge.politics { background: #fd7e14; color: white; }
-        .category-badge.fire { background: #e74c3c; color: white; }
-        .category-badge.education { background: #3498db; color: white; }
-        .category-badge.general { background: #95a5a6; color: white; }
-        
-        .region-badge {
-            background: #e9ecef;
-            color: #495057;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7em;
-            font-weight: 600;
-        }
-        
-        .source {
-            font-size: 0.85em;
-            color: #666;
-            font-weight: 600;
-        }
-        
-        .timestamp {
-            font-size: 0.8em;
-            color: #999;
+            gap: 30px;
             margin-left: auto;
         }
-        
-        .headline {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #1e3c72;
-            margin-bottom: 10px;
-            line-height: 1.3;
+        .stat-box {
+            text-align: center;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
-        
-        .description {
-            color: #444;
-            line-height: 1.6;
+        .stat-box:hover {
+            background: #f0f0f0;
+        }
+        .stat-box.active {
+            background: #2a5298;
+            color: white;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2a5298;
+        }
+        .stat-box.active .stat-number {
+            color: white;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .stat-box.active .stat-label {
+            color: white;
+        }
+        .filters {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+        .story-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .story-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 12px;
         }
-        
-        .audio-player {
-            background: #fffbea;
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            padding: 12px 15px;
-            margin: 12px 0;
+        .story-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-source {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .badge-region {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        .badge-category {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .badge-breaking {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .story-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .story-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .story-title a:hover {
+            color: #2a5298;
+        }
+        .story-time {
+            font-size: 13px;
+            color: #666;
+        }
+        .broadcast-copy {
+            background: #fff8e1;
+            border-left: 4px solid #ffd54f;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .broadcast-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #f57c00;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .broadcast-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 500;
+        }
+        .story-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 12px;
+        }
+        .audio-player {
+            background: #f8f9fa;
+            border: 2px solid #2a5298;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
         .audio-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
-        
         .audio-icon {
-            font-size: 1.3em;
+            font-size: 24px;
         }
-        
         .audio-title {
-            font-weight: bold;
-            color: #856404;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2a5298;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
         .audio-controls {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             align-items: center;
-        }
-        
-        .audio-controls audio {
-            flex: 1;
-            height: 32px;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #eee;
             flex-wrap: wrap;
         }
-        
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9em;
+        .audio-controls audio {
+            flex: 1;
+            min-width: 300px;
         }
-        
-        .btn-copy {
-            background: #28a745;
-            color: white;
+        .audio-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
         }
-        
-        .btn-copy:hover {
-            background: #218838;
-        }
-        
-        .btn-link {
-            background: #007bff;
-            color: white;
-        }
-        
-        .btn-link:hover {
-            background: #0056b3;
-        }
-        
         .btn-audio {
-            background: #ffc107;
-            color: #333;
+            padding: 8px 16px;
+            background: #2a5298;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
         }
-        
         .btn-audio:hover {
-            background: #e0a800;
+            background: #1e3c72;
         }
-        
-        .story-text {
-            display: none;
+        .btn-copy {
+            padding: 8px 16px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
         }
-        
-        .no-stories {
+        .btn-copy:hover {
+            background: #45a049;
+        }
+        .loading {
             text-align: center;
             padding: 60px 20px;
-            background: white;
+            font-size: 18px;
+            color: #666;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .no-stories-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-            
-            .controls {
-                flex-direction: column;
-            }
-            
-            .stats {
-                gap: 10px;
-            }
-            
-            .stat-item {
-                min-width: 80px;
-            }
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>
-                <span>📰</span>
-                Newsroom Live Feed
-            </h1>
-            <div class="subtitle">
-                Real-time news aggregation from your selected sources
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn-refresh" id="refreshBtn" onclick="fetchNews()">
-                <span id="refreshIcon">🔄</span>
-                <span id="refreshText">Refresh News Feed</span>
-            </button>
-            <div class="status">
-                <div class="status-text">
-                    <span id="statusMessage">Click refresh to load latest news</span>
-                </div>
-                <div class="last-update" id="lastUpdate"></div>
-            </div>
-        </div>
-        
-        <div class="stats" id="stats" style="display: none;">
-            <div class="stat-item active" onclick="filterByRegion('all')" data-region="all">
-                <div class="stat-number" id="totalCount">0</div>
-                <div class="stat-label">All Stories</div>
-            </div>
-            <div class="stat-item" onclick="filterByRegion('Local')" data-region="Local">
-                <div class="stat-number" id="localCount">0</div>
-                <div class="stat-label">Local</div>
-            </div>
-            <div class="stat-item" onclick="filterByRegion('State')" data-region="State">
-                <div class="stat-number" id="stateCount">0</div>
-                <div class="stat-label">State</div>
-            </div>
-            <div class="stat-item" onclick="filterByRegion('National')" data-region="National">
-                <div class="stat-number" id="nationalCount">0</div>
-                <div class="stat-label">National</div>
-            </div>
-        </div>
-        
-        <div class="filters" id="filters" style="display: none;">
-            <div class="filter-section">
-                <span class="filter-label">Filter by Category:</span>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="filterByCategory('all')">All Categories</button>
-                    <button class="filter-btn" onclick="filterByCategory('Breaking')">Breaking</button>
-                    <button class="filter-btn" onclick="filterByCategory('Weather')">Weather</button>
-                    <button class="filter-btn" onclick="filterByCategory('Crime')">Crime</button>
-                    <button class="filter-btn" onclick="filterByCategory('Traffic')">Traffic</button>
-                    <button class="filter-btn" onclick="filterByCategory('Politics')">Politics</button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="content">
-            <div class="no-stories">
-                <div class="no-stories-icon">📡</div>
-                <h2>Ready to fetch news</h2>
-                <p>Click the "Refresh News Feed" button above to load the latest stories</p>
-            </div>
-        </div>
+    <div class="header">
+        <h1>📻 NewsRadio 1620 WOWW</h1>
+        <div class="tagline">Pensacola's News & Information Leader</div>
     </div>
-    
+
+    <div class="controls">
+        <button class="btn btn-primary" onclick="loadFeed()">🔄 Refresh News Feed</button>
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="filters" id="filters"></div>
+
+    <div class="container">
+        <div id="loading" class="loading">Loading stories...</div>
+        <div id="stories"></div>
+        <div id="error" class="error" style="display:none"></div>
+    </div>
+
     <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
-        
-        // Replace this with your Cloudflare Worker URL
+        // IMPORTANT: Change this to your Cloudflare Worker URL
         const WORKER_URL = 'https://news.newsradio1620pensacola.workers.dev/';
-        
-        // ============================================
-        // GLOBAL VARIABLES
-        // ============================================
-        
+
         let allStories = [];
-        let currentRegion = 'all';
-        let currentCategory = 'all';
-        
-        // ============================================
-        // FETCH NEWS FROM WORKER
-        // ============================================
-        
-        async function fetchNews() {
-            const refreshBtn = document.getElementById('refreshBtn');
-            const refreshIcon = document.getElementById('refreshIcon');
-            const refreshText = document.getElementById('refreshText');
-            const statusMessage = document.getElementById('statusMessage');
-            const content = document.getElementById('content');
-            
-            // Disable button
-            refreshBtn.disabled = true;
-            refreshIcon.innerHTML = '⏳';
-            refreshText.textContent = 'Fetching news...';
-            statusMessage.textContent = 'Loading stories from RSS feeds...';
-            
-            // Show loading
-            content.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Fetching latest news from all sources...</p>
+        let currentFilters = {
+            region: 'All Stories',
+            category: 'All Categories'
+        };
+
+        function loadFeed() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('stories').innerHTML = '';
+            document.getElementById('error').style.display = 'none';
+
+            fetch(WORKER_URL)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        allStories = data.stories;
+                        displayStats();
+                        displayFilters();
+                        displayStories();
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = 'Error loading feed: ' + err.message;
+                });
+        }
+
+        function displayStats() {
+            const localCount = allStories.filter(s => s.region === 'Local').length;
+            const stateCount = allStories.filter(s => s.region === 'State').length;
+            const nationalCount = allStories.filter(s => s.region === 'National').length;
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-box ${currentFilters.region === 'All Stories' ? 'active' : ''}" onclick="filterByRegion('All Stories')">
+                    <div class="stat-number">${allStories.length}</div>
+                    <div class="stat-label">All Stories</div>
+                </div>
+                <div class="stat-box ${currentFilters.region === 'Local' ? 'active' : ''}" onclick="filterByRegion('Local')">
+                    <div class="stat-number">${localCount}</div>
+                    <div class="stat-label">Local</div>
+                </div>
+                <div class="stat-box ${currentFilters.region === 'State' ? 'active' : ''}" onclick="filterByRegion('State')">
+                    <div class="stat-number">${stateCount}</div>
+                    <div class="stat-label">State</div>
+                </div>
+                <div class="stat-box ${currentFilters.region === 'National' ? 'active' : ''}" onclick="filterByRegion('National')">
+                    <div class="stat-number">${nationalCount}</div>
+                    <div class="stat-label">National</div>
                 </div>
             `;
-            
-            try {
-                const response = await fetch(WORKER_URL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    allStories = data.stories;
-                    displayStories(filterStories());
-                    updateStats(allStories);
-                    
-                    // Update status
-                    const updateTime = new Date(data.updated).toLocaleTimeString();
-                    document.getElementById('lastUpdate').textContent = `Last updated: ${updateTime}`;
-                    statusMessage.textContent = `Loaded ${data.count} stories successfully`;
-                    
-                    // Show stats and filters
-                    document.getElementById('stats').style.display = 'flex';
-                    document.getElementById('filters').style.display = 'block';
-                    
-                } else {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                content.innerHTML = `
-                    <div class="error">
-                        <h3>⚠️ Error Loading News</h3>
-                        <p><strong>Error:</strong> ${error.message}</p>
-                        <p>Please check that:</p>
-                        <ul>
-                            <li>Your Cloudflare Worker is deployed and running</li>
-                            <li>The WORKER_URL in this file is correct</li>
-                            <li>The RSS feeds are accessible</li>
-                        </ul>
-                        <p style="margin-top: 15px;">
-                            <strong>Current Worker URL:</strong> <code>${WORKER_URL}</code>
-                        </p>
-                    </div>
-                `;
-                statusMessage.textContent = 'Error loading news';
-            } finally {
-                // Re-enable button
-                refreshBtn.disabled = false;
-                refreshIcon.innerHTML = '🔄';
-                refreshText.textContent = 'Refresh News Feed';
-            }
         }
-        
-        // ============================================
-        // FILTER STORIES
-        // ============================================
-        
-        function filterStories() {
-            let filtered = allStories;
-            
-            // Filter by region
-            if (currentRegion !== 'all') {
-                filtered = filtered.filter(story => 
-                    story.region === currentRegion
-                );
-            }
-            
-            // Filter by category
-            if (currentCategory !== 'all') {
-                filtered = filtered.filter(story => 
-                    story.category && story.category.toLowerCase() === currentCategory.toLowerCase()
-                );
-            }
-            
-            return filtered;
+
+        function displayFilters() {
+            const categories = [...new Set(allStories.map(s => s.category))].sort();
+
+            let html = '<button class="btn btn-secondary ' + (currentFilters.category === 'All Categories' ? 'active' : '') + '" onclick="filterByCategory(\'All Categories\')">All Categories</button>';
+            categories.forEach(cat => {
+                html += `<button class="btn btn-secondary ${currentFilters.category === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>`;
+            });
+
+            document.getElementById('filters').innerHTML = html;
         }
-        
+
         function filterByRegion(region) {
-            currentRegion = region;
-            
-            // Update active stat item
-            document.querySelectorAll('.stat-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.dataset.region === region) {
-                    item.classList.add('active');
-                }
-            });
-            
-            // Display filtered stories
-            displayStories(filterStories());
+            currentFilters.region = region;
+            displayStats();
+            displayStories();
         }
-        
+
         function filterByCategory(category) {
-            currentCategory = category;
-            
-            // Update active filter button
-            const buttons = document.querySelectorAll('.filter-section .filter-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Display filtered stories
-            displayStories(filterStories());
+            currentFilters.category = category;
+            displayFilters();
+            displayStories();
         }
-        
-        // ============================================
-        // DISPLAY STORIES
-        // ============================================
-        
-        function displayStories(stories) {
-            const content = document.getElementById('content');
-            
-            if (stories.length === 0) {
-                content.innerHTML = `
-                    <div class="no-stories">
-                        <div class="no-stories-icon">📭</div>
-                        <h2>No stories found</h2>
-                        <p>No news stories match the current filters</p>
-                    </div>
-                `;
-                return;
+
+        function displayStories() {
+            let filtered = allStories;
+
+            if (currentFilters.region !== 'All Stories') {
+                filtered = filtered.filter(s => s.region === currentFilters.region);
             }
-            
-            const storiesHTML = stories.map(story => {
-                const category = (story.category || 'General').toLowerCase();
-                const hasAudio = story.audioUrl; // We'll need to add this to worker
-                
-                let audioHTML = '';
-                if (hasAudio) {
-                    audioHTML = `
-                        <div class="audio-player">
-                            <div class="audio-header">
-                                <span class="audio-icon">🔊</span>
-                                <span class="audio-title">AUDIO AVAILABLE</span>
-                            </div>
-                            <div class="audio-controls">
-                                <audio controls>
-                                    <source src="${story.audioUrl}" type="audio/mpeg">
-                                    Your browser does not support audio playback.
-                                </audio>
-                            </div>
-                        </div>
-                    `;
-                }
-                
+
+            if (currentFilters.category !== 'All Categories') {
+                filtered = filtered.filter(s => s.category === currentFilters.category);
+            }
+
+            const html = filtered.map(story => {
+                const hasAudio = story.audioUrl != null;
+                const hasBroadcastCopy = story.broadcastCopy != null;
+
                 return `
-                    <div class="story ${category}" data-category="${story.category}" data-region="${story.region}">
+                    <div class="story-card">
                         <div class="story-header">
-                            <span class="category-badge ${category}">${story.category || 'General'}</span>
-                            <span class="region-badge">${story.region || 'General'}</span>
-                            <span class="source">${story.source}</span>
-                            <span class="timestamp">${formatTime(story.pubDate)}</span>
+                            <div class="story-meta">
+                                <span class="badge badge-source">${story.source}</span>
+                                <span class="badge badge-region">${story.region}</span>
+                                <span class="badge badge-category ${story.category === 'Breaking' ? 'badge-breaking' : ''}">${story.category}</span>
+                                ${hasAudio ? '<span class="badge" style="background:#e8f5e9;color:#2e7d32">🔊 AUDIO</span>' : ''}
+                            </div>
+                            <div class="story-time">${formatTime(story.pubDate)}</div>
                         </div>
-                        <div class="headline">${escapeHtml(story.title)}</div>
-                        <div class="description">${escapeHtml(story.description)}</div>
-                        ${audioHTML}
-                        <div class="actions">
-                            <button class="btn btn-copy" onclick="copyStory(this)">📋 Copy Story</button>
-                            <a href="${story.link}" target="_blank" class="btn btn-link">🔗 Full Article</a>
-                            ${hasAudio ? `<a href="${story.downloadUrl || story.audioUrl}" download class="btn btn-audio">⬇️ Download Audio</a>` : ''}
-                            ${story.trt ? `<span style="color:#666;font-size:0.85em;padding:8px;">TRT ${story.trt}</span>` : ''}
-                            ${story.outCue ? `<span style="color:#666;font-size:0.85em;padding:8px;">Out: "${story.outCue}"</span>` : ''}
+
+                        <div class="story-title">
+                            <a href="${story.link}" target="_blank">${story.title}</a>
                         </div>
-                        <textarea class="story-text">${formatStoryForCopy(story)}</textarea>
+
+                        ${hasBroadcastCopy ? `
+                            <div class="broadcast-copy">
+                                <div class="broadcast-label">📝 AI Broadcast Copy (Anchor-Ready)</div>
+                                <div class="broadcast-text">${story.broadcastCopy}</div>
+                            </div>
+                        ` : ''}
+
+                        ${hasAudio ? `
+                            <div class="audio-player">
+                                <div class="audio-header">
+                                    <span class="audio-icon">🔊</span>
+                                    <span class="audio-title">AUDIO AVAILABLE</span>
+                                </div>
+                                <div class="audio-controls">
+                                    <audio controls>
+                                        <source src="${story.audioUrl}" type="audio/mpeg">
+                                    </audio>
+                                    <a href="${story.downloadUrl || story.audioUrl}" download class="btn btn-audio">⬇️ Download</a>
+                                </div>
+                                ${story.trt || story.outCue ? `
+                                    <div class="audio-meta">
+                                        ${story.trt ? `<span><strong>TRT:</strong> ${story.trt}</span>` : ''}
+                                        ${story.outCue ? `<span><strong>Out Cue:</strong> "${story.outCue}"</span>` : ''}
+                                        ${story.slug ? `<span><strong>Reporter:</strong> ${story.slug}</span>` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+
+                        <div class="story-description">${story.description}</div>
+
+                        <button class="btn-copy" onclick="copyStory(${allStories.indexOf(story)})">📋 Copy Story</button>
                     </div>
                 `;
             }).join('');
-            
-            content.innerHTML = `<div class="stories-container">${storiesHTML}</div>`;
+
+            document.getElementById('stories').innerHTML = html || '<p style="text-align:center;color:#666;padding:40px">No stories match your filters.</p>';
         }
-        
-        // ============================================
-        // UPDATE STATISTICS
-        // ============================================
-        
-        function updateStats(stories) {
-            const localCount = stories.filter(s => s.region === 'Local').length;
-            const stateCount = stories.filter(s => s.region === 'State').length;
-            const nationalCount = stories.filter(s => s.region === 'National').length;
-            
-            document.getElementById('totalCount').textContent = stories.length;
-            document.getElementById('localCount').textContent = localCount;
-            document.getElementById('stateCount').textContent = stateCount;
-            document.getElementById('nationalCount').textContent = nationalCount;
-        }
-        
-        // ============================================
-        // COPY STORY TO CLIPBOARD
-        // ============================================
-        
-        function copyStory(button) {
-            const story = button.closest('.story');
-            const textarea = story.querySelector('.story-text');
-            
-            textarea.style.display = 'block';
-            textarea.select();
-            textarea.setSelectionRange(0, 99999);
-            
-            document.execCommand('copy');
-            
-            textarea.style.display = 'none';
-            
-            const originalText = button.innerHTML;
-            button.innerHTML = '✓ Copied!';
-            button.style.background = '#218838';
-            
-            setTimeout(() => {
-                button.innerHTML = originalText;
-                button.style.background = '#28a745';
-            }, 2000);
-        }
-        
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
-        
-        function formatStoryForCopy(story) {
-            let text = `${story.title}\n\n`;
-            text += `${story.description}\n\n`;
-            if (story.audioUrl) {
-                text += `Audio: ${story.audioUrl}\n`;
-            }
-            text += `Source: ${story.source}\n`;
-            text += `Link: ${story.link}`;
-            return text;
-        }
-        
+
         function formatTime(dateString) {
-            if (!dateString) return 'Unknown time';
-            
+            if (!dateString) return '';
             const date = new Date(dateString);
             const now = new Date();
             const diffMs = now - date;
             const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins} min ago`;
-            if (diffHours < 24) return `${diffHours} hr ago`;
-            
+
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
             return date.toLocaleDateString();
         }
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+
+        function copyStory(index) {
+            const story = allStories[index];
+            let text = `${story.title}\n\n`;
+            if (story.broadcastCopy) {
+                text += `BROADCAST COPY:\n${story.broadcastCopy}\n\n`;
+            }
+            text += `${story.description}\n\n`;
+            if (story.audioUrl) {
+                text += `AUDIO: ${story.audioUrl}\n`;
+                if (story.trt) text += `TRT: ${story.trt}\n`;
+                if (story.outCue) text += `Out Cue: "${story.outCue}"\n`;
+            }
+            text += `\nSource: ${story.source}\n`;
+            text += `Link: ${story.link}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Story copied to clipboard!');
+            });
         }
-        
+
+        // Load feed on page load
+        loadFeed();
     </script>
 </body>
 </html>
