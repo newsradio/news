@@ -639,7 +639,15 @@
                     <p style="color: #666; margin-bottom: 10px;">${story.source} • ${story.region}</p>
                     ${story.description ? `<p>${story.description.substring(0, 200)}...</p>` : ''}
                     ${story.broadcastCopy ? `<div class="broadcast-copy"><strong>AI Copy:</strong> ${story.broadcastCopy}</div>` : ''}
-                    ${story.audioUrl ? `<div class="audio-cue">🎧 Audio Available • ${story.trt || 'Duration unknown'}</div>` : ''}
+                    ${story.audioUrl ? `
+                        <div class="audio-cue">
+                            <div style="margin-bottom: 8px;">🎧 Audio Available • ${story.trt || 'Duration unknown'}</div>
+                            <audio controls style="width: 100%; max-width: 500px;">
+                                <source src="${story.audioUrl}" type="audio/mpeg">
+                            </audio>
+                            ${story.outCue ? `<div style="margin-top: 8px; font-size: 13px;"><strong>OUT:</strong> "${story.outCue}"</div>` : ''}
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
 
@@ -805,23 +813,52 @@
                         </div>
                     </div>
                     
-                    <h3>${story.title}</h3>
-                    <p style="color: #666; margin: 8px 0;">${story.source}</p>
+                    <div contenteditable="true" style="outline: none; padding: 10px; border: 1px dashed #ddd; border-radius: 4px; margin: 10px 0;" onblur="updateStoryContent(${idx}, 'title', this.textContent)">
+                        <h3 style="margin: 0;">${story.title}</h3>
+                    </div>
+                    
+                    <p style="color: #666; margin: 8px 0;">${story.source} • ${story.region}</p>
+                    
+                    ${story.description ? `
+                        <div style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+                            <strong>Original Story:</strong><br>
+                            ${story.description}
+                        </div>
+                    ` : ''}
                     
                     ${story.broadcastCopy ? `
                         <div class="broadcast-copy">
                             <strong>📝 BROADCAST COPY:</strong><br>
-                            ${story.broadcastCopy}
+                            <div contenteditable="true" style="outline: none; margin-top: 8px;" onblur="updateStoryContent(${idx}, 'broadcastCopy', this.textContent)">
+                                ${story.broadcastCopy}
+                            </div>
                         </div>
-                    ` : ''}
+                    ` : `
+                        <div class="broadcast-copy">
+                            <strong>📝 BROADCAST COPY:</strong><br>
+                            <div contenteditable="true" style="outline: none; margin-top: 8px; min-height: 60px;" onblur="updateStoryContent(${idx}, 'broadcastCopy', this.textContent)" placeholder="Type your broadcast copy here...">
+                                ${story.description ? story.description.substring(0, 300) : 'Type your script here...'}
+                            </div>
+                        </div>
+                    `}
                     
                     ${story.audioUrl ? `
                         <div class="audio-cue">
                             <strong>🎧 AUDIO CUE:</strong><br>
                             Duration: ${story.trt || 'Unknown'}<br>
-                            ${story.outCue ? `OUT: "${story.outCue}"` : ''}
+                            ${story.outCue ? `OUT: "${story.outCue}"<br>` : ''}
+                            <audio controls style="width: 100%; margin-top: 8px;">
+                                <source src="${story.audioUrl}" type="audio/mpeg">
+                            </audio>
                         </div>
                     ` : ''}
+                    
+                    <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+                        <strong>📝 Notes/Instructions:</strong>
+                        <div contenteditable="true" style="outline: none; margin-top: 8px; min-height: 40px;" onblur="updateStoryContent(${idx}, 'notes', this.textContent)" placeholder="Add production notes, timing, or special instructions...">
+                            ${story.notes || ''}
+                        </div>
+                    </div>
                 </div>
             `).join('');
             
@@ -896,6 +933,14 @@
 
         function handleDragEnd() {
             this.classList.remove('dragging');
+        }
+
+        // UPDATE STORY CONTENT
+        function updateStoryContent(idx, field, value) {
+            if (scripts[currentAnchor][idx]) {
+                scripts[currentAnchor][idx][field] = value;
+                saveAllScripts();
+            }
         }
 
         // Auto-refresh
