@@ -10,581 +10,574 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        
-        /* RED STATION COLORS! */
-        .header {
-            background: linear-gradient(135deg, #c62828 0%, #b71c1c 50%, #8b0000 100%);
-            color: white;
-            padding: 25px 30px;
-            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
-            border-bottom: 3px solid #ff5252;
-        }
-        .header h1 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            letter-spacing: 0.5px;
-        }
-        .header .tagline {
-            font-size: 15px;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-        
-        .controls {
-            background: white;
-            padding: 20px 30px;
-            border-bottom: 2px solid #ffebee;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            max-width: 450px;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 18px;
-            border: 2px solid #ffcdd2;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: #c62828;
-            box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
-        }
-        
-        .btn {
-            padding: 11px 22px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #c62828, #d32f2f);
-            color: white;
-            box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #b71c1c, #c62828);
-            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.4);
-            transform: translateY(-1px);
-        }
-        .btn-filter {
-            background: #fff;
-            color: #666;
-            border: 2px solid #e0e0e0;
-        }
-        .btn-filter:hover {
-            background: #ffebee;
-            border-color: #ffcdd2;
-            color: #c62828;
-        }
-        .btn-filter.active {
-            background: linear-gradient(135deg, #c62828, #d32f2f);
-            color: white;
-            border-color: #c62828;
-            box-shadow: 0 2px 6px rgba(198, 40, 40, 0.3);
-        }
-        
-        .stats {
-            background: linear-gradient(to right, #ffebee, #ffffff);
-            padding: 18px 30px;
-            border-bottom: 1px solid #ffcdd2;
-            display: flex;
-            gap: 35px;
-            font-size: 14px;
-            box-shadow: inset 0 2px 4px rgba(198, 40, 40, 0.05);
-        }
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .stat-label {
-            color: #666;
-            font-weight: 600;
-        }
-        .stat-value {
-            font-weight: 900;
-            color: #c62828;
-            font-size: 20px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 25px;
-        }
-        
-        .story-card {
             background: white;
             border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 22px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .logo {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #DC143C;
+            border-radius: 8px;
+            margin-bottom: 15px;
             transition: all 0.3s;
-            border-left: 4px solid transparent;
         }
-        .story-card:hover {
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.2);
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #DC143C;
+            color: #DC143C;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: #DC143C;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(198, 40, 40, 0.15);
-            border-left-color: #c62828;
         }
-        
+
+        .filter-btn.active {
+            background: #DC143C;
+            color: white;
+        }
+
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #999;
+            color: #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+        .category-btn.active {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        /* Special styling for Press Releases */
+        .category-btn.press-release {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .category-btn.press-release.active {
+            background: #FF6B35;
+            color: white;
+        }
+
+        /* Special styling for Government */
+        .category-btn.government {
+            border-color: #4A5899;
+            color: #4A5899;
+        }
+
+        .category-btn.government.active {
+            background: #4A5899;
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: #fff;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat {
+            font-size: 14px;
+        }
+
+        .stat strong {
+            color: #DC143C;
+            font-size: 18px;
+        }
+
+        .refresh-btn {
+            padding: 10px 24px;
+            background: #DC143C;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #8B0000;
+            transform: scale(1.05);
+        }
+
+        .stories {
+            padding: 20px 30px;
+            max-height: calc(100vh - 500px);
+            overflow-y: auto;
+        }
+
+        .story {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .story:hover {
+            border-color: #DC143C;
+            box-shadow: 0 4px 12px rgba(220, 20, 60, 0.15);
+        }
+
+        /* Press Release Special Styling */
+        .story.press-release {
+            border-left: 5px solid #FF6B35;
+            background: #FFF9F5;
+        }
+
+        .story.government {
+            border-left: 5px solid #4A5899;
+            background: #F5F6FA;
+        }
+
         .story-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 14px;
+            align-items: start;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
+
         .story-meta {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+
         .badge {
-            padding: 5px 14px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 4px;
             font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .badge-local {
-            background: linear-gradient(135deg, #ffebee, #ffcdd2);
-            color: #c62828;
-            border: 1px solid #ffcdd2;
-        }
-        .badge-state {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            color: #7b1fa2;
-            border: 1px solid #e1bee7;
-        }
-        .badge-national {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            color: #1976d2;
-            border: 1px solid #bbdefb;
-        }
-        .badge-category {
-            background: #f5f5f5;
-            color: #666;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .story-time {
-            color: #999;
-            font-size: 13px;
             font-weight: 600;
         }
-        .story-source {
-            font-weight: 700;
-            color: #c62828;
-            font-size: 13px;
+
+        .badge.local {
+            background: #DC143C;
+            color: white;
         }
-        
+
+        .badge.state {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .badge.national {
+            background: #4A90E2;
+            color: white;
+        }
+
+        .badge.press-release {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .badge.government {
+            background: #4A5899;
+            color: white;
+        }
+
+        .badge.category {
+            background: #6c757d;
+            color: white;
+        }
+
         .story-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            line-height: 1.4;
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
-        .story-title a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.2s;
+
+        .story-source {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
-        .story-title a:hover {
-            color: #c62828;
-        }
-        
+
         .story-description {
             color: #555;
-            line-height: 1.7;
-            margin-bottom: 16px;
-            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 12px;
         }
-        
+
+        /* AI Broadcast Copy */
         .broadcast-copy {
-            background: linear-gradient(135deg, #fff9c4, #fff59d);
-            border-left: 5px solid #fdd835;
-            padding: 18px;
-            margin-top: 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(253, 216, 53, 0.2);
+            background: #FFFACD;
+            border-left: 4px solid #FFD700;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 4px;
         }
+
         .broadcast-copy-label {
-            font-size: 11px;
-            font-weight: 800;
+            font-weight: 700;
+            color: #B8860B;
+            margin-bottom: 8px;
+            font-size: 13px;
             text-transform: uppercase;
-            color: #f57f17;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
         }
+
         .broadcast-copy-text {
             color: #333;
-            line-height: 1.8;
-            font-size: 16px;
-            font-weight: 500;
+            line-height: 1.6;
         }
-        
+
+        /* Press Release Sender Info */
+        .sender-info {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .sender-info strong {
+            color: #FF6B35;
+        }
+
         .audio-player {
-            background: linear-gradient(135deg, #ffebee, #fff);
-            padding: 16px;
-            border-radius: 10px;
-            margin-top: 16px;
-            border: 2px solid #ffcdd2;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 12px 0;
         }
+
         .audio-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 13px;
-        }
-        .audio-label {
-            font-weight: 800;
-            color: #c62828;
-            font-size: 14px;
-        }
-        .audio-meta {
             color: #666;
-            font-size: 12px;
-            font-weight: 600;
         }
-        
-        .outcue {
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border-left: 4px solid #4caf50;
-            padding: 12px 15px;
-            margin-top: 12px;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-        .outcue-label {
-            font-weight: 800;
-            color: #2e7d32;
-            font-size: 11px;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-        .outcue-text {
-            color: #1b5e20;
-            font-weight: 600;
-            font-style: italic;
-        }
-        
+
         audio {
             width: 100%;
-            height: 36px;
+            height: 40px;
         }
-        
+
+        .story-link {
+            display: inline-block;
+            color: #DC143C;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .story-link:hover {
+            color: #8B0000;
+            text-decoration: underline;
+        }
+
         .loading {
             text-align: center;
-            padding: 80px 20px;
+            padding: 40px;
             color: #666;
         }
-        .spinner {
-            border: 4px solid #ffcdd2;
-            border-top: 4px solid #c62828;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 25px;
-            border-radius: 10px;
-            margin: 25px;
-            border-left: 5px solid #c62828;
-            font-weight: 600;
-        }
-        
+
         @media (max-width: 768px) {
-            .header {
-                padding: 20px;
-            }
             .header h1 {
-                font-size: 26px;
+                font-size: 1.8em;
             }
-            .controls {
-                padding: 15px 20px;
+
+            .filters {
+                flex-direction: column;
             }
-            .stats {
-                padding: 15px 20px;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-            .container {
-                padding: 15px;
-            }
-            .story-card {
-                padding: 18px;
-            }
-            .story-title {
-                font-size: 19px;
+
+            .filter-btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📻 NEWSRADIO 1620 - NEWSROOM FEED</h1>
-        <div class="tagline">Professional News Aggregation • AI Broadcast Rewrites • Live Audio</div>
-    </div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📻</div>
+            <h1>NEWSRADIO 1620 - NEWSROOM FEED</h1>
+            <p>Professional News Aggregation • AI Broadcast Rewrites • Live Audio</p>
+        </div>
 
-    <div class="controls">
-        <div class="search-box">
-            <input type="text" id="searchBox" placeholder="🔍 Search stories, sources, keywords..." oninput="searchStories(this.value)">
-        </div>
-        
-        <button class="btn btn-filter active" onclick="filterAll()">All</button>
-        <button class="btn btn-filter" onclick="filterByRegion('Local')">Local</button>
-        <button class="btn btn-filter" onclick="filterByRegion('State')">State</button>
-        <button class="btn btn-filter" onclick="filterByRegion('National')">National</button>
-        <button class="btn btn-filter" onclick="filterByAudio()">🔊 Audio</button>
-        <button class="btn btn-primary" onclick="loadStories()">🔄 Refresh</button>
-    </div>
+        <div class="controls">
+            <input type="text" class="search-box" id="search" placeholder="Search stories, sources, keywords...">
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">ALL</button>
+                <button class="filter-btn" data-filter="local">LOCAL</button>
+                <button class="filter-btn" data-filter="state">STATE</button>
+                <button class="filter-btn" data-filter="national">NATIONAL</button>
+                <button class="filter-btn" data-filter="audio">🎧 AUDIO</button>
+            </div>
 
-    <div class="stats">
-        <div class="stat-item">
-            <span class="stat-label">Total Stories:</span>
-            <span class="stat-value" id="all-count">0</span>
+            <div class="category-filters">
+                <button class="category-btn press-release" data-category="Press Release">📧 Press Releases</button>
+                <button class="category-btn government" data-category="Government">🏛️ Government Leaders</button>
+                <button class="category-btn" data-category="Military">🎖️ Military</button>
+                <button class="category-btn" data-category="Crime">🚔 Crime</button>
+                <button class="category-btn" data-category="Fire">🚒 Fire</button>
+                <button class="category-btn" data-category="Weather">🌤️ Weather</button>
+                <button class="category-btn" data-category="Traffic">🚗 Traffic</button>
+                <button class="category-btn" data-category="Education">🏫 Education</button>
+                <button class="category-btn" data-category="Politics">🗳️ Politics</button>
+                <button class="category-btn" data-category="Breaking">⚡ Breaking</button>
+            </div>
         </div>
-        <div class="stat-item">
-            <span class="stat-label">Local:</span>
-            <span class="stat-value" id="local-count">0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">State:</span>
-            <span class="stat-value" id="state-count">0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">National:</span>
-            <span class="stat-value" id="national-count">0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">With Audio:</span>
-            <span class="stat-value" id="audio-count">0</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">Last Updated:</span>
-            <span class="stat-value" id="last-updated">--</span>
-        </div>
-    </div>
 
-    <div class="container" id="stories-container">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p style="font-size: 16px; font-weight: 600; color: #c62828;">Loading stories...</p>
+        <div class="stats">
+            <div class="stat">Total Stories: <strong id="total-count">0</strong></div>
+            <div class="stat">Local: <strong id="local-count">0</strong></div>
+            <div class="stat">State: <strong id="state-count">0</strong></div>
+            <div class="stat">National: <strong id="national-count">0</strong></div>
+            <div class="stat">With Audio: <strong id="audio-count">0</strong></div>
+            <div class="stat">Last Updated: <strong id="last-updated">--</strong></div>
+            <button class="refresh-btn" onclick="loadStories()">🔄 REFRESH</button>
+        </div>
+
+        <div class="stories" id="stories">
+            <div class="loading">Loading stories...</div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://news.newsradio1620pensacola.workers.dev/';
         let allStories = [];
+        let currentFilter = 'all';
+        let currentCategory = null;
+        let searchTerm = '';
 
         async function loadStories() {
-            const container = document.getElementById('stories-container');
-            container.innerHTML = '<div class="loading"><div class="spinner"></div><p style="font-size: 16px; font-weight: 600; color: #c62828;">Loading stories...</p></div>';
-
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch('https://news.newsradio1620pensacola.workers.dev/');
                 const data = await response.json();
-
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to load stories');
-                }
-
-                allStories = data.stories || [];
-                displayStories(allStories);
-                updateStats();
                 
-                const updateTime = new Date(data.updated).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit'
-                });
-                document.getElementById('last-updated').textContent = updateTime;
-
+                if (data.success) {
+                    allStories = data.stories;
+                    updateStats(data);
+                    displayStories();
+                }
             } catch (error) {
-                container.innerHTML = `<div class="error">⚠️ Error loading stories: ${error.message}</div>`;
+                document.getElementById('stories').innerHTML = '<div class="loading">Error loading stories. Please refresh.</div>';
             }
         }
 
-        function displayStories(stories) {
-            const container = document.getElementById('stories-container');
+        function updateStats(data) {
+            document.getElementById('total-count').textContent = data.count;
+            document.getElementById('local-count').textContent = data.stories.filter(s => s.region === 'Local').length;
+            document.getElementById('state-count').textContent = data.stories.filter(s => s.region === 'State').length;
+            document.getElementById('national-count').textContent = data.stories.filter(s => s.region === 'National').length;
+            document.getElementById('audio-count').textContent = data.stories.filter(s => s.audioUrl).length;
             
-            if (stories.length === 0) {
-                container.innerHTML = '<div class="loading"><p style="font-size: 16px; font-weight: 600; color: #c62828;">No stories found</p></div>';
-                return;
+            const updated = new Date(data.updated);
+            document.getElementById('last-updated').textContent = updated.toLocaleTimeString();
+        }
+
+        function displayStories() {
+            let filtered = allStories;
+
+            // Region filter
+            if (currentFilter === 'local') {
+                filtered = filtered.filter(s => s.region === 'Local');
+            } else if (currentFilter === 'state') {
+                filtered = filtered.filter(s => s.region === 'State');
+            } else if (currentFilter === 'national') {
+                filtered = filtered.filter(s => s.region === 'National');
+            } else if (currentFilter === 'audio') {
+                filtered = filtered.filter(s => s.audioUrl);
             }
 
-            container.innerHTML = stories.map(story => createStoryCard(story)).join('');
-        }
-
-        function createStoryCard(story) {
-            const regionBadge = `badge-${story.region.toLowerCase()}`;
-            const timeAgo = getTimeAgo(story.pubDate);
-            
-            const audioSection = story.audioUrl ? `
-                <div class="audio-player">
-                    <div class="audio-info">
-                        <span class="audio-label">🎙️ AUDIO AVAILABLE</span>
-                        ${story.trt ? `<span class="audio-meta">TRT: ${story.trt}</span>` : ''}
-                    </div>
-                    <audio controls preload="none">
-                        <source src="${story.audioUrl}" type="audio/mpeg">
-                        Your browser does not support audio playback.
-                    </audio>
-                    ${story.outCue ? `
-                        <div class="outcue">
-                            <div class="outcue-label">Out Cue:</div>
-                            <div class="outcue-text">"${story.outCue}"</div>
-                        </div>
-                    ` : ''}
-                </div>
-            ` : '';
-
-            const broadcastSection = story.broadcastCopy ? `
-                <div class="broadcast-copy">
-                    <div class="broadcast-copy-label">✨ AI Broadcast Copy</div>
-                    <div class="broadcast-copy-text">${story.broadcastCopy}</div>
-                </div>
-            ` : '';
-
-            return `
-                <div class="story-card" 
-                     data-region="${story.region}" 
-                     data-category="${story.category}"
-                     data-source="${story.source}"
-                     data-audio-url="${story.audioUrl || ''}">
-                    <div class="story-header">
-                        <div class="story-meta">
-                            <span class="badge ${regionBadge}">${story.region}</span>
-                            <span class="badge badge-category">${story.category}</span>
-                            <span class="story-source">${story.source}</span>
-                        </div>
-                        <span class="story-time">${timeAgo}</span>
-                    </div>
-                    <h2 class="story-title">
-                        <a href="${story.link}" target="_blank">${story.title}</a>
-                    </h2>
-                    <div class="story-description">${story.description}</div>
-                    ${broadcastSection}
-                    ${audioSection}
-                </div>
-            `;
-        }
-
-        function getTimeAgo(dateString) {
-            if (!dateString) return 'Just now';
-            
-            const date = new Date(dateString);
-            const now = new Date();
-            const seconds = Math.floor((now - date) / 1000);
-            
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-            return `${Math.floor(seconds / 86400)}d ago`;
-        }
-
-        function updateStats() {
-            const local = allStories.filter(s => s.region === 'Local').length;
-            const state = allStories.filter(s => s.region === 'State').length;
-            const national = allStories.filter(s => s.region === 'National').length;
-            const withAudio = allStories.filter(s => s.audioUrl).length;
-
-            document.getElementById('all-count').textContent = allStories.length;
-            document.getElementById('local-count').textContent = local;
-            document.getElementById('state-count').textContent = state;
-            document.getElementById('national-count').textContent = national;
-            document.getElementById('audio-count').textContent = withAudio;
-        }
-
-        function filterAll() {
-            displayStories(allStories);
-            updateActiveButton(event.target);
-            document.getElementById('searchBox').value = '';
-        }
-
-        function filterByRegion(region) {
-            const filtered = allStories.filter(s => s.region === region);
-            displayStories(filtered);
-            updateActiveButton(event.target);
-            document.getElementById('searchBox').value = '';
-        }
-
-        function filterByAudio() {
-            const filtered = allStories.filter(s => s.audioUrl && s.audioUrl !== 'null');
-            displayStories(filtered);
-            updateActiveButton(event.target);
-            document.getElementById('searchBox').value = '';
-        }
-
-        function searchStories(query) {
-            if (!query.trim()) {
-                displayStories(allStories);
-                return;
+            // Category filter
+            if (currentCategory) {
+                filtered = filtered.filter(s => s.category === currentCategory);
             }
 
-            const searchTerm = query.toLowerCase();
-            const filtered = allStories.filter(story => {
-                return (
-                    story.title.toLowerCase().includes(searchTerm) ||
-                    story.description.toLowerCase().includes(searchTerm) ||
-                    story.source.toLowerCase().includes(searchTerm) ||
-                    story.category.toLowerCase().includes(searchTerm)
+            // Search filter
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(s => 
+                    s.title?.toLowerCase().includes(term) ||
+                    s.description?.toLowerCase().includes(term) ||
+                    s.source?.toLowerCase().includes(term)
                 );
-            });
+            }
 
-            displayStories(filtered);
-            
-            document.querySelectorAll('.btn-filter').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            const storiesHTML = filtered.map(story => {
+                const isPressRelease = story.category === 'Press Release' || story.pressRelease;
+                const isGovernment = story.category === 'Government';
+                const storyClass = isPressRelease ? 'press-release' : (isGovernment ? 'government' : '');
+                
+                return `
+                    <div class="story ${storyClass}">
+                        <div class="story-header">
+                            <div class="story-meta">
+                                <span class="badge ${story.region?.toLowerCase() || 'national'}">${story.region || 'National'}</span>
+                                ${isPressRelease ? '<span class="badge press-release">📧 PRESS RELEASE</span>' : ''}
+                                ${isGovernment ? '<span class="badge government">🏛️ GOVERNMENT</span>' : ''}
+                                ${story.category ? `<span class="badge category">${story.category}</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        <h2 class="story-title">${story.title}</h2>
+                        <div class="story-source">${story.source}</div>
+                        
+                        ${story.description ? `<div class="story-description">${story.description}</div>` : ''}
+                        
+                        ${story.broadcastCopy ? `
+                            <div class="broadcast-copy">
+                                <div class="broadcast-copy-label">✨ AI Broadcast Copy</div>
+                                <div class="broadcast-copy-text">${story.broadcastCopy}</div>
+                            </div>
+                        ` : ''}
+                        
+                        ${(story.senderEmail || story.senderName) ? `
+                            <div class="sender-info">
+                                <strong>From:</strong> ${story.senderName || 'Unknown'} 
+                                ${story.senderEmail ? `&lt;${story.senderEmail}&gt;` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${story.audioUrl ? `
+                            <div class="audio-player">
+                                <div class="audio-info">
+                                    <span>🎧 Audio Available</span>
+                                    ${story.trt ? `<span>Duration: ${story.trt}</span>` : ''}
+                                </div>
+                                <audio controls>
+                                    <source src="${story.audioUrl}" type="audio/mpeg">
+                                </audio>
+                                ${story.outCue ? `<div style="margin-top: 8px; font-size: 13px; color: #666;"><strong>OUT CUE:</strong> ${story.outCue}</div>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${story.link && story.link !== '#' ? `<a href="${story.link}" target="_blank" class="story-link">Read Full Story →</a>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('stories').innerHTML = storiesHTML || '<div class="loading">No stories match your filters.</div>';
         }
 
-        function updateActiveButton(button) {
-            document.querySelectorAll('.btn-filter').forEach(btn => {
-                btn.classList.remove('active');
+        // Event listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                displayStories();
             });
-            button.classList.add('active');
-        }
+        });
 
-        loadStories();
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                    currentCategory = null;
+                } else {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.dataset.category;
+                }
+                displayStories();
+            });
+        });
+
+        document.getElementById('search').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            displayStories();
+        });
+
+        // Auto-refresh every 5 minutes
         setInterval(loadStories, 5 * 60 * 1000);
+
+        // Load on startup
+        loadStories();
     </script>
 </body>
 </html>
