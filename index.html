@@ -538,6 +538,9 @@
                 
                 <div class="script-actions">
                     <button class="action-btn new-anchor-btn" onclick="createNewAnchor()">➕ New Anchor</button>
+                    <button class="action-btn" style="background: #17a2b8; color: white;" onclick="addBlankStory()">📝 Add Blank Story</button>
+                    <button class="action-btn" style="background: #6f42c1; color: white;" onclick="document.getElementById('audioUpload').click()">🎵 Upload Audio</button>
+                    <input type="file" id="audioUpload" accept="audio/*" style="display: none;" onchange="handleAudioUpload(event)">
                     <button class="action-btn save-btn" onclick="saveAllScripts()">💾 Save</button>
                     <button class="action-btn print-btn" onclick="printScript()">🖨️ Print</button>
                     <button class="action-btn clear-btn" onclick="clearCurrentScript()">🗑️ Clear</button>
@@ -647,6 +650,21 @@
                             </audio>
                             ${story.outCue ? `<div style="margin-top: 8px; font-size: 13px;"><strong>OUT:</strong> "${story.outCue}"</div>` : ''}
                         </div>
+                    ` : ''}
+                    ${story.link && story.link !== '#' ? `
+                        <a href="${story.link}" target="_blank" style="display: inline-block; margin-top: 12px; padding: 8px 16px; background: #DC143C; color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.background='#8B0000'" onmouseout="this.style.background='#DC143C'">
+                            Read Full Story →
+                        </a>
+                    ` : ''}
+                    ${story.link && story.link !== '#' ? `
+                        <a href="${story.link}" target="_blank" style="display: inline-block; margin-top: 10px; color: #DC143C; font-weight: 600; text-decoration: none;">
+                            📰 Read Full Story →
+                        </a>
+                    ` : ''}
+                    ${story.link && story.link !== '#' ? `
+                        <a href="${story.link}" target="_blank" style="display: inline-block; margin-top: 10px; color: #DC143C; font-weight: 600; text-decoration: none;">
+                            📄 Read Full Story →
+                        </a>
                     ` : ''}
                 </div>
             `).join('');
@@ -851,7 +869,13 @@
                                 <source src="${story.audioUrl}" type="audio/mpeg">
                             </audio>
                         </div>
-                    ` : ''}
+                    ` : `
+                        <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 4px;">
+                            <strong>🎧 Add Audio:</strong><br>
+                            <input type="file" accept="audio/*" onchange="handleAudioUpload(${idx}, this)" style="margin-top: 8px;">
+                            <div style="font-size: 12px; color: #666; margin-top: 5px;">Upload MP3, WAV, or other audio file</div>
+                        </div>
+                    `}
                     
                     <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
                         <strong>📝 Notes/Instructions:</strong>
@@ -941,6 +965,67 @@
                 scripts[currentAnchor][idx][field] = value;
                 saveAllScripts();
             }
+        }
+
+        // ADD BLANK STORY
+        function addBlankStory() {
+            const blankStory = {
+                title: 'New Story - Click to Edit',
+                source: 'Custom',
+                region: 'Local',
+                description: '',
+                broadcastCopy: 'Type your script here...',
+                category: 'General',
+                guid: `custom-${Date.now()}`,
+                addedAt: new Date().toISOString(),
+                notes: ''
+            };
+            
+            scripts[currentAnchor].push(blankStory);
+            renderAnchorTabs();
+            renderScript();
+        }
+
+        // HANDLE AUDIO UPLOAD
+        function handleAudioUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Check if audio file
+            if (!file.type.startsWith('audio/')) {
+                alert('Please select an audio file (MP3, WAV, etc.)');
+                return;
+            }
+            
+            // Convert to base64 for storage
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const audioData = e.target.result;
+                
+                // Create a new story with the uploaded audio
+                const audioStory = {
+                    title: `Audio: ${file.name}`,
+                    source: 'Custom Upload',
+                    region: 'Local',
+                    description: `Uploaded audio file: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`,
+                    broadcastCopy: 'Write your intro/outro copy here...',
+                    category: 'General',
+                    guid: `audio-upload-${Date.now()}`,
+                    addedAt: new Date().toISOString(),
+                    audioUrl: audioData,
+                    audioFileName: file.name,
+                    trt: ':00', // Duration unknown without processing
+                    notes: '⚠️ Note: Audio is stored locally. After VPS setup, files will upload to cloud storage.'
+                };
+                
+                scripts[currentAnchor].push(audioStory);
+                renderAnchorTabs();
+                renderScript();
+                
+                alert(`✅ Audio "${file.name}" added to ${currentAnchor}'s script!\n\nNote: Currently stored locally. Will upload to cloud after VPS setup.`);
+            };
+            
+            reader.readAsDataURL(file);
         }
 
         // Auto-refresh
